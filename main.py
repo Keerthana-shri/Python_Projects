@@ -1,35 +1,12 @@
 from fastapi import FastAPI, HTTPException, Query
-from pydantic import BaseModel
 import json
 from typing import List
+from models import Pokemon, Ability, Stat, Type 
 
 app = FastAPI()
 
 with open('pokedex_raw_array.json', 'r') as file:
     pokemon_data = json.load(file)
-
-class Ability(BaseModel):
-    name: str
-    is_hidden: bool
-
-class Stat(BaseModel):
-    name: str
-    base_stat: int
-
-class Type(BaseModel):
-    name: str
-
-class Pokemon(BaseModel):
-    id: int
-    name: str
-    height: int
-    weight: int
-    xp: int
-    image_url: str
-    pokemon_url: str
-    abilities: List[Ability]
-    stats: List[Stat]
-    types: List[Type]
 
 @app.get('/pokemon/id/{pokemon_id}')
 def get_pokemon_by_id(pokemon_id: int):
@@ -63,7 +40,7 @@ def create_pokemon(pokemon: Pokemon):
     new_pokemon = pokemon.model_dump()
     new_pokemon["abilities"] = [ability.model_dump() for ability in pokemon.abilities]
     new_pokemon["stats"] = [stat.model_dump() for stat in pokemon.stats]
-    new_pokemon["types"] = [type_.model_dump() for type_ in pokemon.types]
+    new_pokemon["types"] = [pokemon_type.model_dump() for pokemon_type in pokemon.types]
     pokemon_data.append(new_pokemon)
     return {"message": f"Pokemon {pokemon.name} was created successfully"}
 
@@ -74,7 +51,7 @@ def update_pokemon(pokemon_id: int, updated_pokemon: Pokemon):
             updated_data = updated_pokemon.model_dump()
             updated_data["abilities"] = [ability.model_dump() for ability in updated_pokemon.abilities]
             updated_data["stats"] = [stat.model_dump() for stat in updated_pokemon.stats]
-            updated_data["types"] = [type_.model_dump() for type_ in updated_pokemon.types]
+            updated_data["types"] = [pokemon_type.model_dump() for pokemon_type in updated_pokemon.types]
             pokemon_data[index] = updated_data
             return {"message": f"Pokemon {updated_pokemon.name} was updated successfully"}
     raise HTTPException(status_code=404, detail="Pokemon not found")
