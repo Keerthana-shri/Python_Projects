@@ -36,8 +36,10 @@ def get_pokemon_with_hidden_abilities(skip: int = 0, limit: int = 20):
     return hidden_ability_pokemon[skip:skip + limit]
 
 @app.get('/pokemon', response_model=List[Pokemon])
-def get_all_pokemon(skip: int = 0, limit: int = 20):
-    return pokemon_data[skip:skip + limit]
+def get_all_pokemon(page: int = 1, limit: int = 20):
+    start= (page-1) * limit
+    end= start +limit
+    return pokemon_data[start:end]
 
 @app.post('/pokemon')
 def create_pokemon(pokemon: Pokemon):
