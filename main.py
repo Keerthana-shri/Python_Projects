@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException, Query
 import json
 from typing import List
-from models import Pokemon, Ability, Stat, Type 
+from models import Pokemon, Ability, Stat, Type, HiddenAbilityPokemon
 
 app = FastAPI()
 
@@ -22,13 +22,17 @@ def get_pokemon_by_name(pokemon_name: str):
             return pokemon
     raise HTTPException(status_code=404, detail="Pokemon not found")
 
-@app.get('/pokemon/hidden_abilities', response_model=List[Pokemon])
+@app.get('/pokemon/hidden_abilities', response_model=List[HiddenAbilityPokemon])
 def get_pokemon_with_hidden_abilities(skip: int = 0, limit: int = 20):
     hidden_ability_pokemon = []
     for pokemon in pokemon_data:
         hidden_abilities = [ability for ability in pokemon['abilities'] if ability['is_hidden']]
         if hidden_abilities:
-            hidden_ability_pokemon.append(pokemon)
+            hidden_ability_pokemon.append({
+                "id": pokemon['id'],
+                "name": pokemon['name'],
+                "hidden_abilities": hidden_abilities
+            })
     return hidden_ability_pokemon[skip:skip + limit]
 
 @app.get('/pokemon', response_model=List[Pokemon])
