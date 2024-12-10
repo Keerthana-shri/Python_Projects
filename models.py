@@ -1,16 +1,20 @@
 from pydantic import BaseModel
 from typing import List, Optional
 
+
 class Ability(BaseModel):
     name: str
     is_hidden: bool
+
 
 class Stat(BaseModel):
     name: str
     base_stat: int
 
+
 class Type(BaseModel):
     name: str
+
 
 class Pokemon(BaseModel):
     id: int
@@ -23,6 +27,7 @@ class Pokemon(BaseModel):
     abilities: List[Ability]
     stats: List[Stat]
     types: List[Type]
+
 
 class HiddenAbilityPokemon(BaseModel):
     id: int
