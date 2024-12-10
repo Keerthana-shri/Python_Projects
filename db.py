@@ -11,8 +11,9 @@ engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 Base = declarative_base()
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+
 class Employee(Base):
-    __tablename__ = 'employees'
+    __tablename__ = "employees"
 
     id = Column(Integer, primary_key=True, index=True)
     first_name = Column(String, nullable=False)
@@ -21,7 +22,9 @@ class Employee(Base):
     date_of_joining = Column(Date, nullable=False)
     grade = Column(String, nullable=False)
 
+
 Base.metadata.create_all(bind=engine)
+
 
 class Database:
     def __init__(self):
@@ -29,11 +32,15 @@ class Database:
 
     def create_employee(self, employee):
         session = self.Session()
-        existing_employee = session.query(Employee).filter(
-            Employee.first_name == employee.first_name,
-            Employee.last_name == employee.last_name,
-            Employee.date_of_birth == employee.date_of_birth
-        ).first()
+        existing_employee = (
+            session.query(Employee)
+            .filter(
+                Employee.first_name == employee.first_name,
+                Employee.last_name == employee.last_name,
+                Employee.date_of_birth == employee.date_of_birth,
+            )
+            .first()
+        )
         if existing_employee:
             session.close()
             return None  # Employee already exists
@@ -42,15 +49,16 @@ class Database:
         session.refresh(employee)
         session.close()
         return employee
-    
+
     def search_employees(self, first_name, last_name):
         session = self.Session()
-        employees = session.query(Employee).filter(
-            Employee.first_name == first_name,
-            Employee.last_name == last_name
-        ).all()
+        employees = (
+            session.query(Employee)
+            .filter(Employee.first_name == first_name, Employee.last_name == last_name)
+            .all()
+        )
         session.close()
-        return employees  
+        return employees
 
     def get_employee(self, emp_id):
         session = self.Session()
@@ -60,11 +68,15 @@ class Database:
 
     def get_employee_by_details(self, first_name, last_name, date_of_birth):
         session = self.Session()
-        employee = session.query(Employee).filter(
-            Employee.first_name == first_name,
-            Employee.last_name == last_name,
-            Employee.date_of_birth == date_of_birth
-        ).first()
+        employee = (
+            session.query(Employee)
+            .filter(
+                Employee.first_name == first_name,
+                Employee.last_name == last_name,
+                Employee.date_of_birth == date_of_birth,
+            )
+            .first()
+        )
         session.close()
         return employee
 
@@ -90,22 +102,27 @@ class Database:
         csv_file = StringIO(csv_content)
         reader = csv.DictReader(csv_file)
         for row in reader:
-            date_of_birth = datetime.strptime(row['date_of_birth'], '%m/%d/%Y').date()
-            date_of_joining = datetime.strptime(row['date_of_joining'], '%m/%d/%Y').date()
-            existing_employee = session.query(Employee).filter(
-                Employee.first_name == row['first_name'],
-                Employee.last_name == row['last_name'],
-                Employee.date_of_birth == date_of_birth
-            ).first()
+            date_of_birth = datetime.strptime(row["date_of_birth"], "%m/%d/%Y").date()
+            date_of_joining = datetime.strptime(
+                row["date_of_joining"], "%m/%d/%Y"
+            ).date()
+            existing_employee = (
+                session.query(Employee)
+                .filter(
+                    Employee.first_name == row["first_name"],
+                    Employee.last_name == row["last_name"],
+                    Employee.date_of_birth == date_of_birth,
+                )
+                .first()
+            )
             if not existing_employee:
                 employee = Employee(
-                    first_name=row['first_name'],
-                    last_name=row['last_name'],
+                    first_name=row["first_name"],
+                    last_name=row["last_name"],
                     date_of_birth=date_of_birth,
                     date_of_joining=date_of_joining,
-                    grade=row['grade']
+                    grade=row["grade"],
                 )
                 session.add(employee)
         session.commit()
         session.close()
-
