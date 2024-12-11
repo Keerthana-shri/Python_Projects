@@ -24,21 +24,17 @@ def login_and_authenticate(
     credentials: HTTPBasicCredentials = Depends(security),
 ):
     if credentials.username == "" and credentials.password == "":
-        raise HTTPException(
-            status_code=401, detail="Username and password are missing"
-        )
+        raise HTTPException(status_code=401, detail="Username and password are missing")
     elif credentials.username == "":
         raise HTTPException(status_code=401, detail="Username is missing")
     elif credentials.password == "":
         raise HTTPException(status_code=401, detail="Password is missing")
     elif (
-        credentials.username != VALID_USERNAME
-        or credentials.password != VALID_PASSWORD
+        credentials.username != VALID_USERNAME or credentials.password != VALID_PASSWORD
     ):
         raise HTTPException(
             status_code=401,
-            detail="Your login credentials are not right,\
-                  try again with right one",
+            detail="Your login credentials are not right, try again with right one",
         )
     else:
         return {"message": "Login successful"}
@@ -125,8 +121,8 @@ def create_employee(employee: EmployeeModel):
     else:
         errors.append(
             {
-                "grade": "The provided grade is invalid. \
-                            It should be 'M1', 'M2', or 'M3'."
+                "grade": "The provided grade is invalid."
+                "It should be 'M1', 'M2', or 'M3'."
             }
         )
 
@@ -168,14 +164,12 @@ def create_employee(employee: EmployeeModel):
         if emp:
             return {
                 "message": (
-                    f"Employee details of {emp.first_name} {emp.last_name}\
-                         have been added successfully."
+                    f"Employee details of {emp.first_name}"
+                    f" {emp.last_name} have been added successfully."
                 )
             }
     except ValidationError as e:
-        raise HTTPException(
-            status_code=422, detail="The provided grade is invalid"
-        )
+        raise HTTPException(status_code=422, detail="The provided grade is invalid")
 
 
 """Search the details of an employee with first_name and last_name"""
@@ -285,9 +279,7 @@ def update_employee(emp_id: int, updates: UpdateEmployeeModel):
             if validate_name(updates.first_name):
                 pass
             else:
-                errors.append(
-                    {"first_name": "The name you entered is invalid."}
-                )
+                errors.append({"first_name": "The name you entered is invalid."})
         else:
             pass
 
@@ -295,9 +287,7 @@ def update_employee(emp_id: int, updates: UpdateEmployeeModel):
             if validate_name(updates.last_name):
                 pass
             else:
-                errors.append(
-                    {"last_name": "The name you entered is invalid."}
-                )
+                errors.append({"last_name": "The name you entered is invalid."})
         else:
             pass
 
@@ -307,8 +297,8 @@ def update_employee(emp_id: int, updates: UpdateEmployeeModel):
             else:
                 errors.append(
                     {
-                        "grade": "The entered grade is invalid. \
-                            It should be 'M1', 'M2', or 'M3'."
+                        "grade": "The entered grade is invalid."
+                        "It should be 'M1', 'M2', or 'M3'."
                     }
                 )
         else:
@@ -319,19 +309,15 @@ def update_employee(emp_id: int, updates: UpdateEmployeeModel):
 
         """If no validation errors, proceed with the update"""
         try:
-            emp = logic.update_employee(
-                emp_id, updates.model_dump(exclude_unset=True)
-            )
+            emp = logic.update_employee(emp_id, updates.model_dump(exclude_unset=True))
             return {
                 "message": (
-                    f"Employee details of {emp.first_name} {emp.last_name}\
-                          have been updated successfully."
+                    f"Employee details of {emp.first_name} "
+                    f"{emp.last_name} have been updated successfully."
                 )
             }
         except ValidationError as e:
-            raise HTTPException(
-                status_code=422, detail="The entered grade is invalid"
-            )
+            raise HTTPException(status_code=422, detail="The entered grade is invalid")
     else:
         raise HTTPException(status_code=404, detail="Employee not found")
 
