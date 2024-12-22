@@ -26,10 +26,3 @@ class PokemonInput(BaseModel):
     abilities: List[Ability]
     stats: List[Stat]
     types: List[Type]
-
-
-class PokemonResponse(PokemonInput):
-    id: int
-
-    class Config:
-        orm_mode = True
