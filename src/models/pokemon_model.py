@@ -22,7 +22,7 @@ class Ability(Base):
     __tablename__ = "abilities"
     id = Column(Integer, primary_key=True, index=True)
     pokemon_id = Column(Integer, ForeignKey("pokemon.id", ondelete="CASCADE"))
-    name = Column(String(15)) 
+    name = Column(String(15))
     is_hidden = Column(Boolean)
     pokemon = relationship("Pokemon", back_populates="abilities")
 
@@ -38,8 +38,6 @@ class Type(Base):
     __tablename__ = "types"
     id = Column(Integer, primary_key=True, index=True)
     pokemon_id = Column(Integer, ForeignKey("pokemon.id", ondelete="CASCADE"))
-    name = Column(String(10)) 
+    name = Column(String(10))
     pokemon = relationship("Pokemon", back_populates="types")
-
-
 

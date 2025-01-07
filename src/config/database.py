@@ -2,7 +2,6 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
-from src.models.pokemon_model import Base
 
 load_dotenv()
 DATABASE_URL = os.getenv("DATABASE_URL")
@@ -16,5 +15,3 @@ def get_db():
         yield db
     finally:
         db.close()
-
-
