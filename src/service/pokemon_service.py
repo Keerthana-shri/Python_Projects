@@ -1,6 +1,7 @@
 from src.config.unit_of_work import UnitOfWork
 from src.schemas.pokemon_schema import PokemonInput
 
+
 class PokemonService:
     def __init__(self, unit_of_work: UnitOfWork):
         self.unit_of_work = unit_of_work
@@ -68,24 +69,26 @@ class PokemonService:
                 abilities = [ability for ability in pokemon.abilities]
                 stats = [stat for stat in pokemon.stats]
                 types = [type_ for type_ in pokemon.types]
-                result.append({
-                    "id": pokemon.id,
-                    "name": pokemon.name,
-                    "height": pokemon.height,
-                    "weight": pokemon.weight,
-                    "xp": pokemon.xp,
-                    "image_url": pokemon.image_url,
-                    "pokemon_url": pokemon.pokemon_url,
-                    "abilities": [
-                        {"name": ability.name, "is_hidden": ability.is_hidden}
-                        for ability in abilities
-                    ],
-                    "stats": [
-                        {"name": stat.name, "base_stat": stat.base_stat}
-                        for stat in stats
-                    ],
-                    "types": [{"name": type_.name} for type_ in types],
-                })
+                result.append(
+                    {
+                        "id": pokemon.id,
+                        "name": pokemon.name,
+                        "height": pokemon.height,
+                        "weight": pokemon.weight,
+                        "xp": pokemon.xp,
+                        "image_url": pokemon.image_url,
+                        "pokemon_url": pokemon.pokemon_url,
+                        "abilities": [
+                            {"name": ability.name, "is_hidden": ability.is_hidden}
+                            for ability in abilities
+                        ],
+                        "stats": [
+                            {"name": stat.name, "base_stat": stat.base_stat}
+                            for stat in stats
+                        ],
+                        "types": [{"name": type_.name} for type_ in types],
+                    }
+                )
             return result
 
     async def create_pokemon(self, pokemon_data: PokemonInput):
@@ -99,4 +102,3 @@ class PokemonService:
     async def delete_pokemon(self, pokemon_id: int):
         with self.unit_of_work as uow:
             return uow.pokemon_repository.delete(pokemon_id)
-

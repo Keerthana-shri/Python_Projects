@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship, declarative_base
 
 Base = declarative_base()
 
+
 class Pokemon(Base):
     __tablename__ = "pokemon"
     id = Column(Integer, primary_key=True, index=True)
@@ -18,6 +19,7 @@ class Pokemon(Base):
     stats = relationship("Stat", back_populates="pokemon", cascade="all, delete-orphan")
     types = relationship("Type", back_populates="pokemon", cascade="all, delete-orphan")
 
+
 class Ability(Base):
     __tablename__ = "abilities"
     id = Column(Integer, primary_key=True, index=True)
@@ -25,6 +27,7 @@ class Ability(Base):
     name = Column(String(15))
     is_hidden = Column(Boolean)
     pokemon = relationship("Pokemon", back_populates="abilities")
+
 
 class Stat(Base):
     __tablename__ = "stats"
@@ -34,10 +37,10 @@ class Stat(Base):
     base_stat = Column(Integer)
     pokemon = relationship("Pokemon", back_populates="stats")
 
+
 class Type(Base):
     __tablename__ = "types"
     id = Column(Integer, primary_key=True, index=True)
     pokemon_id = Column(Integer, ForeignKey("pokemon.id", ondelete="CASCADE"))
     name = Column(String(10))
     pokemon = relationship("Pokemon", back_populates="types")
-

@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from src.repository.pokemon_repository import PokemonRepository
 
+
 class UnitOfWork:
     def __init__(self, db: Session):
         self.db = db

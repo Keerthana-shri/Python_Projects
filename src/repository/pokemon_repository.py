@@ -3,6 +3,7 @@ from src.models.pokemon_model import Pokemon, Ability, Stat, Type
 from src.schemas.pokemon_schema import PokemonInput
 from src.repository.pokemon_base_repository import BaseRepository
 
+
 class PokemonRepository(BaseRepository):
     def __init__(self, db: Session):
         super().__init__(Pokemon, db)
@@ -37,20 +38,26 @@ class PokemonRepository(BaseRepository):
         db_pokemon.xp = updated_data.xp
         db_pokemon.image_url = str(updated_data.image_url)
         db_pokemon.pokemon_url = str(updated_data.pokemon_url)
-        
+
         # Clear existing relationships
         self.db.query(Ability).filter(Ability.pokemon_id == pokemon_id).delete()
         self.db.query(Stat).filter(Stat.pokemon_id == pokemon_id).delete()
         self.db.query(Type).filter(Type.pokemon_id == pokemon_id).delete()
-        
+
         # Add new relationships
         db_pokemon.abilities.extend(
-            [Ability(name=ability.name, is_hidden=ability.is_hidden) for ability in updated_data.abilities]
+            [
+                Ability(name=ability.name, is_hidden=ability.is_hidden)
+                for ability in updated_data.abilities
+            ]
         )
         db_pokemon.stats.extend(
-            [Stat(name=stat.name, base_stat=stat.base_stat) for stat in updated_data.stats]
+            [
+                Stat(name=stat.name, base_stat=stat.base_stat)
+                for stat in updated_data.stats
+            ]
         )
         db_pokemon.types.extend([Type(name=type_.name) for type_ in updated_data.types])
-        
+
         self.db.commit()
         return db_pokemon

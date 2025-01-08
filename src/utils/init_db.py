@@ -10,9 +10,11 @@ from src.schemas.pokemon_schema import (
 from src.repository.pokemon_repository import PokemonRepository
 from src.config.database import SessionLocal, engine
 
+
 async def initialize_database():
     Base.metadata.create_all(bind=engine)
     await populate_database()
+
 
 async def populate_database():
     with open("src/data/pokedex_raw_array.json") as f:
@@ -41,6 +43,3 @@ async def populate_database():
                 types=types,
             )
             await PokemonRepository.create(db, pokemon_input)
-
-
-
