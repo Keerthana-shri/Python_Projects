@@ -1,27 +1,19 @@
-from pydantic import BaseModel, field_validator, ValidationError
+from pydantic import BaseModel, Field, field_validator, ValidationError
 from typing import List
 
 class Ability(BaseModel):
-    name: str
+    name: str = Field(..., max_length=30)
     is_hidden: bool
 
     # @field_validator('name')
     # def validate_ability_name(cls, v):
-    #     if len(v) > 15:
-    #         raise ValueError('Ability name must be at most 15 characters')
-    #     # if not v.isalpha():
-    #     #     raise ValueError('Ability name must contain only alphabets')
+    #     if len(v) > 30:
+    #         raise ValueError('Ability name must be at most 30 characters')
     #     return v
 
 class Stat(BaseModel):
-    name: str
+    name: str = Field(..., max_length=30)
     base_stat: int
-
-    # @field_validator('name')
-    # def validate_stat_name(cls, v):
-    #     if not v.isalpha():
-    #         raise ValueError('Stat name must contain only alphabets')
-    #     return v
 
     # @field_validator('base_stat')
     # def validate_base_stat(cls, v):
@@ -30,34 +22,32 @@ class Stat(BaseModel):
     #     return v
 
 class Type(BaseModel):
-    name: str
+    name: str = Field(..., max_length=15)
 
     # @field_validator('name')
     # def validate_type_name(cls, v):
-    #     if len(v) > 10:
-    #         raise ValueError('Type name must be at most 10 characters')
+    #     if len(v) > 15:
+    #         raise ValueError('Type name must be at most 15 characters')
     #     valid_types = ["normal", "fire", "water", "electric", "grass", "ice", "fighting", "poison", "ground", "flying", "psychic", "bug", "rock", "ghost", "dragon", "dark", "steel", "fairy"]
     #     if v.lower() not in valid_types:
     #         raise ValueError(f'Provide the right type within {valid_types}')
     #     return v
 
 class PokemonInput(BaseModel):
-    name: str
+    name: str = Field(..., max_length=30)
     height: int
     weight: int
     xp: int
-    image_url: str
-    pokemon_url: str
+    image_url: str = Field(..., max_length=300)
+    pokemon_url: str = Field(..., max_length=300)
     abilities: List[Ability]
     stats: List[Stat]
     types: List[Type]
 
     # @field_validator('name')
     # def validate_name(cls, v):
-    #     if len(v) > 15:
-    #         raise ValueError('Name must be at most 15 characters')
-    #     # if not v.isalpha():
-    #     #     raise ValueError('Name must contain only alphabets')
+    #     if len(v) > 30:
+    #         raise ValueError('Name must be at most 30 characters')
     #     return v
 
     # @field_validator('height')
@@ -81,6 +71,6 @@ class PokemonInput(BaseModel):
     # @field_validator('image_url', 'pokemon_url')
     # def validate_urls(cls, v):
     #     url_str = str(v)
-    #     if len(url_str) > 150:
-    #         raise ValueError('URL must be at most 150 characters')
+    #     if len(url_str) > 300:
+    #         raise ValueError('URL must be at most 300 characters')
     #     return v

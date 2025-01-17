@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ pokemon.name }} Details</title>
+</head>
+<body>
+    <h1>{{ pokemon.name }} Details</h1>
+    <p>Height: {{ pokemon.height }}</p>
+    <p>Weight: {{ pokemon.weight }}</p>
+    <p>XP: {{ pokemon.xp }}</p>
+    <p>Abilities:</p>
+    <ul>
+        {% for ability in pokemon.abilities %}
+            <li>{{ ability.name }} (Hidden: {{ ability.is_hidden }})</li>
+        {% endfor %}
+    </ul>
+    <p>Stats:</p>
+    <ul>
+        {% for stat in pokemon.stats %}
+            <li>{{ stat.name }}: {{ stat.base_stat }}</li>
+        {% endfor %}
+    </ul>
+    <p>Types:</p>
+    <ul>
+        {% for type in pokemon.types %}
+            <li>{{ type.name }}</li>
+        {% endfor %}
+    </ul>
+    <a href="/pokemons">Back to All Pokemons</a><br/>
+    <a href="/">Back to Home</a>
+</body>
+</html>

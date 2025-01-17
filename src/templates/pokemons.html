@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Pokemons</title>
+</head>
+<body>
+    <h1>All Pokemons</h1>
+    <ul>
+        {% for pokemon in pokemons %}
+            <li>{{ pokemon.name }} - <a href="/pokemon/id/{{ pokemon.id }}">Details</a></li>
+        {% endfor %}
+    </ul>
+    <a href="/">Back to Home</a>
+</body>
+</html>

@@ -6,11 +6,20 @@ class UnitOfWork:
         self.db: Session = SessionLocal()
 
     def __enter__(self):
-        return self.db
+        return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if exc_type:
-            self.db.rollback()
+            self.rollback()
         else:
-            self.db.commit()
+            self.commit()
+        self.close()
+
+    def commit(self):
+        self.db.commit()
+
+    def rollback(self):
+        self.db.rollback()
+
+    def close(self):
         self.db.close()
