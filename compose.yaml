@@ -3,7 +3,7 @@
 services:
   web:
     build: .
-    container_name: pokemon_fastapi
+    container_name: pokemon_fastapi_withoutjwt
     command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
     volumes:
       - .:/pokemon_code_1
@@ -14,7 +14,7 @@ services:
 
   db:
     image: postgres:13
-    container_name: pokemon_postgres
+    container_name: pokemon_postgres_withoutjwt
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: Keerth123
